@@ -1,5 +1,6 @@
-__pycache__/
-*.pyc
-.saved_login
-test_output.pdf
+node_modules/
+dist/
+dist-electron/
+release/
+release2/
 *.pdf
