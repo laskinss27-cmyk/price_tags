@@ -126,8 +126,10 @@ export function ClientsView() {
   }, [clients]);
 
   // Применение всех фильтров + поиск (без пагинации).
+  // Поиск разбиваем по пробелам: каждое слово должно встретиться хотя бы в одном
+  // поле клиента, порядок неважен. Так "Андрей Мельник" найдёт "Мельник Андрей".
   const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
+    const tokens = search.trim().toLowerCase().split(/\s+/).filter(Boolean);
     return clients.filter((c) => {
       if (!showDeleted && c._deleted) return false;
       if (fltManager && String(c.user || "") !== fltManager) return false;
@@ -135,14 +137,18 @@ export function ClientsView() {
       if (fltOnlyPhone && !c.phone) return false;
       if (fltOnlyEmail && !c.email) return false;
       if (fltOnlyAddress && !c.address) return false;
-      if (q) {
+      if (tokens.length > 0) {
+        // Склеиваем все скалярные поля клиента в одну строку и ищем каждое слово.
+        let blob = "";
         for (const k in c) {
           const v = c[k];
           if (v == null) continue;
           if (typeof v === "object") continue;
-          if (String(v).toLowerCase().includes(q)) return true;
+          blob += " " + String(v).toLowerCase();
         }
-        return false;
+        for (const t of tokens) {
+          if (!blob.includes(t)) return false;
+        }
       }
       return true;
     });

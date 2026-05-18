@@ -1,6 +1,6 @@
 {
   "name": "price_tags",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Печать ценников из базы dom-automation.ru",
   "main": "dist-electron/main.js",
   "author": "Умный Дом",
