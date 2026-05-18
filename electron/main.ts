@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, shell } from "electron";
 import * as path from "path";
 import { apiCheckAuth, apiLogin, apiLogout } from "./api";
 import { registerCatalogIpc } from "./catalog";
+import { registerClientsIpc } from "./clients";
 import { registerPriceIpc } from "./prices";
 import { registerSettingsIpc } from "./settings";
 import { registerPrintIpc } from "./print";
@@ -42,6 +43,7 @@ app.whenReady().then(() => {
   ipcMain.handle("api:checkAuth", () => apiCheckAuth());
 
   registerCatalogIpc();
+  registerClientsIpc();
   registerPriceIpc();
   registerSettingsIpc();
   registerPrintIpc();

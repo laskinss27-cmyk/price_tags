@@ -127,6 +127,58 @@ export type ApiGood = Record<string, any> & {
  * Архивные товары НЕ фильтруем здесь — отдадим как есть, отфильтруем в UI
  * (так пользователь увидит реальное количество).
  */
+export type ApiClient = Record<string, any> & {
+  id: string | number;
+  name?: string;
+  fio?: string;
+  phone?: string;
+  email?: string;
+};
+
+/**
+ * Полная выгрузка клиентов: пагинация по `rows` штук.
+ * Та же схема, что у apiGetGoods, но module=mod_clients.
+ */
+export async function apiGetClients(
+  onProgress?: (loaded: number) => void,
+  rowsPerPage = 1000,
+  maxPages = 100,
+): Promise<ApiClient[]> {
+  const all: ApiClient[] = [];
+  for (let page = 1; page <= maxPages; page++) {
+    try {
+      const qs = new URLSearchParams({
+        module: "mod_clients",
+        getFormat: "json",
+        page: String(page),
+        rows: String(rowsPerPage),
+      });
+      const body = new URLSearchParams({
+        _search: "false",
+        sidx: "name",
+        sord: "asc",
+        page: String(page),
+        rows: String(rowsPerPage),
+      }).toString();
+      const resp = await net.fetch(BASE_URL + "/ajax/get.php?" + qs.toString(), {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body,
+        credentials: "include",
+      });
+      const data = await resp.json();
+      if (!Array.isArray(data) || data.length === 0) break;
+      all.push(...(data as ApiClient[]));
+      onProgress?.(all.length);
+      if (data.length < rowsPerPage) break;
+    } catch (e) {
+      console.error(`apiGetClients page=${page} error:`, e);
+      break;
+    }
+  }
+  return all;
+}
+
 export async function apiGetGoods(
   onProgress?: (loaded: number) => void,
   rowsPerPage = 1000,

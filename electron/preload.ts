@@ -17,6 +17,15 @@ contextBridge.exposeInMainWorld("api", {
     return () => ipcRenderer.removeListener("catalog:refreshProgress", h);
   },
 
+  // clients cache
+  getClients: () => ipcRenderer.invoke("clients:get"),
+  refreshClients: () => ipcRenderer.invoke("clients:refresh"),
+  onClientsProgress: (cb: (loaded: number) => void) => {
+    const h = (_e: unknown, p: { loaded: number }) => cb(p.loaded);
+    ipcRenderer.on("clients:refreshProgress", h);
+    return () => ipcRenderer.removeListener("clients:refreshProgress", h);
+  },
+
   getPrices: () => ipcRenderer.invoke("prices:get"),
   setPrice: (id: string, price: number | null) =>
     ipcRenderer.invoke("prices:set", id, price),

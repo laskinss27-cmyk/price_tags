@@ -35,3 +35,12 @@ export interface PrinterInfo {
 }
 
 export type PriceMap = Record<string, number>;
+
+export type Client = Record<string, any> & {
+  id: string | number;
+  name?: string;
+  fio?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+};
