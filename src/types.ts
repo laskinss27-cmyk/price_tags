@@ -44,3 +44,8 @@ export type Client = Record<string, any> & {
   email?: string;
   address?: string;
 };
+
+export interface ClientsOverlay {
+  deletedIds: string[];
+  edits: Record<string, Record<string, any>>;
+}

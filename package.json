@@ -1,6 +1,6 @@
 {
   "name": "price_tags",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Печать ценников из базы dom-automation.ru",
   "main": "dist-electron/main.js",
   "author": "Умный Дом",
@@ -18,7 +18,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
-    "electron": "^28.2.0",
+    "electron": "28.2.10",
     "electron-builder": "^24.9.1",
     "typescript": "^5.3.3",
     "vite": "^5.0.10",

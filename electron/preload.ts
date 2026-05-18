@@ -25,6 +25,12 @@ contextBridge.exposeInMainWorld("api", {
     ipcRenderer.on("clients:refreshProgress", h);
     return () => ipcRenderer.removeListener("clients:refreshProgress", h);
   },
+  // local overlay edits
+  clientDeleteLocal:  (id: string) => ipcRenderer.invoke("clients:deleteLocal",  id),
+  clientRestoreLocal: (id: string) => ipcRenderer.invoke("clients:restoreLocal", id),
+  clientEditLocal:    (id: string, patch: Record<string, any>) => ipcRenderer.invoke("clients:editLocal", id, patch),
+  clientResetLocal:   (id: string) => ipcRenderer.invoke("clients:resetLocal",   id),
+  clientsClearOverlay: () => ipcRenderer.invoke("clients:clearOverlay"),
 
   getPrices: () => ipcRenderer.invoke("prices:get"),
   setPrice: (id: string, price: number | null) =>

@@ -1,4 +1,4 @@
-import type { Category, Client, Good, PriceMap, PrinterInfo, TagSettings } from "./types";
+import type { Category, Client, ClientsOverlay, Good, PriceMap, PrinterInfo, TagSettings } from "./types";
 
 declare global {
   interface Window {
@@ -13,9 +13,14 @@ declare global {
       refreshCatalog: () => Promise<{ savedAt: string | null; goods: Good[]; categories: Category[] }>;
       onCatalogProgress: (cb: (loaded: number) => void) => () => void;
 
-      getClients: () => Promise<{ savedAt: string | null; clients: Client[] }>;
-      refreshClients: () => Promise<{ savedAt: string | null; clients: Client[] }>;
+      getClients: () => Promise<{ savedAt: string | null; clients: Client[]; overlay: ClientsOverlay }>;
+      refreshClients: () => Promise<{ savedAt: string | null; clients: Client[]; overlay: ClientsOverlay }>;
       onClientsProgress: (cb: (loaded: number) => void) => () => void;
+      clientDeleteLocal:  (id: string) => Promise<ClientsOverlay>;
+      clientRestoreLocal: (id: string) => Promise<ClientsOverlay>;
+      clientEditLocal:    (id: string, patch: Record<string, any>) => Promise<ClientsOverlay>;
+      clientResetLocal:   (id: string) => Promise<ClientsOverlay>;
+      clientsClearOverlay: () => Promise<ClientsOverlay>;
 
       getPrices: () => Promise<PriceMap>;
       setPrice: (id: string, price: number | null) => Promise<PriceMap>;
